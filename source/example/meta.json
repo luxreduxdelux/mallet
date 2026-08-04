@@ -1,0 +1,56 @@
+{
+    "editor": {
+        "up": [0.0, 1.0, 0.0],
+        "export": {
+            "location": "point",
+            "rotation": "angle",
+            "scale":    "scale"
+        }
+    },
+    "entity": [
+        {
+            "name": {
+                "internal": "Cube",
+                "external": "entity_cube"
+            },
+            "info": "A simple cube.",
+            "body": {
+                "kind": "cuboid",
+                "size": [1.0, 1.0, 1.0]
+            },
+            "field": [
+                {
+                    "name": {
+                        "internal": "Scale",
+                        "external": "scale"
+                    },
+                    "info": "Cube scale.",
+                    "kind": "decimal",
+                    "data": 1
+                }
+            ]
+        },
+        {
+            "name": {
+                "internal": "Sphere",
+                "external": "entity_sphere"
+            },
+            "info": "A simple sphere.",
+            "body": {
+                "kind": "sphere",
+                "size": [1.0, 1.0, 1.0]
+            },
+            "field": [
+                {
+                    "name": {
+                        "internal": "Scale",
+                        "external": "scale"
+                    },
+                    "info": "Sphere scale.",
+                    "kind": "decimal",
+                    "data": 1
+                }
+            ]
+        }
+    ]
+}

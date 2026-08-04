@@ -110,6 +110,8 @@ It will automatically detect if Torch is available to use, so all you need to do
 ## Example
 You can find a working example of a Mallet meta-file and a basic game written in Rust that can read the GLB file with the Blender-written entity data in the [example](https://github.com/luxreduxdelux/mallet/tree/main/source/example) folder.
 
+You also download this example with each release automatically.
+
 ## Check Out...
 [Torch](https://github.com/luxreduxdelux/torch), a one-click light-map bake add-on for Blender.
 
