@@ -21,10 +21,7 @@ You must load this file before being able to access Mallet's entity editor.
             "location": "point",
             "rotation": "angle",
             "scale":    "scale"
-        },
-
-        # [OPTIONAL] Game directory. This is otherwise set by the "Select Game" button in Mallet, but may be set here for ease of use.
-        "path": ""
+        }
     },
 
     # Entity array.

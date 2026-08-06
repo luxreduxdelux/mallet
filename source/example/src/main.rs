@@ -10,11 +10,17 @@
 * This example is also a show-case of the Game Launch feature in Mallet; exporting and immediately
 * launching the game after, even passing along the view-port camera's location and
 * rotation into the game.
+* If you launch the game through Blender, it will listen for any modification to the level file
+* and automatically re-load the level.
 * ================================================================
 */
 
+use notify::{Config, Event, INotifyWatcher, RecommendedWatcher, RecursiveMode, Watcher};
 use raylib::prelude::*;
 use std::collections::HashMap;
+use std::path::Path;
+use std::sync::mpsc::Receiver;
+use std::sync::mpsc::channel;
 
 //================================================================
 
@@ -41,6 +47,15 @@ fn main() {
         None
     };
 
+    // Set up a file-modification listener.
+    let listen = if let Some(path) = get_launch_level()
+        && let Ok(rx) = listen_for_file(&path)
+    {
+        Some(rx)
+    } else {
+        None
+    };
+
     // Handle obtaining the view-port camera from Blender if we got it as an environment variable.
     let camera = get_launch_camera();
 
@@ -54,6 +69,18 @@ fn main() {
                     level = Some(ok);
                 }
                 Err(error) => println!("{error:#?}"),
+            }
+        }
+
+        // Handle listening for level modification.
+        if let Some((_, listen)) = &listen {
+            while let Ok(path) = listen.try_recv() {
+                match Level::new(&mut handle, &thread, &path) {
+                    Ok(ok) => {
+                        level = Some(ok);
+                    }
+                    Err(error) => println!("{error:#?}"),
+                }
             }
         }
 
@@ -139,11 +166,13 @@ impl Level {
                     let extra = extra.get();
                     let extra: HashMap<String, serde_json::Value> = serde_json::from_str(extra)?;
 
-                    if let Some(entity_index) = extra.get("entity_index")
-                        && let serde_json::Value::Number(index) = entity_index
+                    println!("GLTF extra data: {extra:#?}");
+
+                    if let Some(entity_index) = extra.clone().get("entity_index")
+                        && let serde_json::Value::String(index) = entity_index
                     {
                         entity.push(Entity::new(
-                            index.as_u64().unwrap_or_default(),
+                            index,
                             EntityData::new(node.transform()),
                             extra,
                         )?);
@@ -175,12 +204,12 @@ enum Entity {
 
 impl Entity {
     fn new(
-        index: u64,
+        index: &str,
         e_data: EntityData,
         value: HashMap<String, serde_json::Value>,
     ) -> anyhow::Result<Self> {
         match index {
-            0 => {
+            "entity_cube" => {
                 if let Some(value) = value.get("entity_cube")
                     && let Ok(c_data) = serde_json::from_value(value.clone())
                 {
@@ -277,4 +306,26 @@ fn get_vector(key: &str) -> anyhow::Result<Option<Vector3>> {
     } else {
         Ok(None)
     }
+}
+
+fn listen_for_file(path: &str) -> anyhow::Result<(INotifyWatcher, Receiver<String>)> {
+    let (tx, rx) = channel();
+
+    let mut watcher = RecommendedWatcher::new(
+        move |event: notify::Result<Event>| {
+            if let Ok(event) = event
+                && let notify::EventKind::Modify(_) = event.kind
+                && let Some(path) = event.paths.first()
+            {
+                tx.send(path.display().to_string()).unwrap();
+            }
+        },
+        Config::default(),
+    )?;
+
+    watcher.watch(Path::new(path), RecursiveMode::NonRecursive)?;
+
+    println!("Listening for file {path:#?}");
+
+    Ok((watcher, rx))
 }

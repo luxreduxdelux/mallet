@@ -1,56 +1,53 @@
 {
     "editor": {
         "up": [0.0, 1.0, 0.0],
-        "export": {
-            "location": "point",
-            "rotation": "angle",
-            "scale":    "scale"
+        "always_initialize": true
+    },
+    "object": {
+        "object_field": {
+            "kind": "decimal"
         }
     },
-    "entity": [
-        {
-            "name": {
-                "internal": "Cube",
-                "external": "entity_cube"
-            },
-            "info": "A simple cube.",
-            "body": {
-                "kind": "cuboid",
-                "size": [1.0, 1.0, 1.0]
-            },
-            "field": [
-                {
-                    "name": {
-                        "internal": "Scale",
-                        "external": "scale"
-                    },
-                    "info": "Cube scale.",
-                    "kind": "decimal",
-                    "data": 1
+    "entity": {
+        "entity_cube": {
+            "name": "Cube Entity",
+            "info": "Cube entity info.",
+            "field": {
+                "scale": {
+                    "kind": "decimal"
+                },
+                "integer": {
+                    "kind": "integer"
+                },
+                "decimal": {
+                    "kind": "decimal"
+                },
+                "boolean": {
+                    "kind": "boolean"
+                },
+                "string": {
+                    "kind": "string"
+                },
+                "enumerate": {
+                    "kind": "switch",
+                    "data": "VALUE_1",
+                    "list": [
+                        ["VALUE_1", "Value 1", "Value 1."],
+                        ["VALUE_2", "Value 2", "Value 2."],
+                        ["VALUE_3", "Value 3", "Value 3."]
+                    ]
+                },
+                "vector": {
+                    "kind": "vector"
+                },
+                "color": {
+                    "kind": "vector",
+                    "type": "color"
+                },
+                "index": {
+                    "kind": "index"
                 }
-            ]
-        },
-        {
-            "name": {
-                "internal": "Sphere",
-                "external": "entity_sphere"
-            },
-            "info": "A simple sphere.",
-            "body": {
-                "kind": "sphere",
-                "size": [1.0, 1.0, 1.0]
-            },
-            "field": [
-                {
-                    "name": {
-                        "internal": "Scale",
-                        "external": "scale"
-                    },
-                    "info": "Sphere scale.",
-                    "kind": "decimal",
-                    "data": 1
-                }
-            ]
+            }
         }
-    ]
+    }
 }

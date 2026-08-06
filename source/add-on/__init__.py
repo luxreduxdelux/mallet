@@ -2,7 +2,7 @@ bl_info = {
     "name"        : "Mallet",
     "author"      : "luxreduxdelux",
     "version"     : (1, 0, 0),
-    "blender"     : (5, 2, 0),
+    "blender"     : (4, 5, 0),
     "location"    : "View3D > Sidebar",
     "description" : "Game engine agnostic entity editor for Blender.",
     "category"    : "3D View",

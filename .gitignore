@@ -1,1 +1,3 @@
 source/example/target
+mallet.sublime-*
+__pycache__
